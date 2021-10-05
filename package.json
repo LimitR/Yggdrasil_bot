@@ -1,0 +1,16 @@
+{
+  "name": "mesh_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Artem LimitR (@digital_marketolog_ru)",
+  "license": "ISC",
+  "dependencies": {
+    "i": "^0.3.7",
+    "node-telegram-bot-api": "^0.54.0",
+    "npm": "^7.24.2"
+  }
+}
