@@ -28,10 +28,51 @@ class User{
     }
 }
 
-bot.setMyCommands(
-[{command: '/start', description: 'test'}]
-)
-bot.onText(/\/start/, async msg =>{
+
+
+bot.on('polling_error', async msg =>{
+    bot.sendMessage(msg.chat.id, 'ERROR')
+})
+bot.on('message', async msg =>{
+        if(maps.has(msg.from.id)){
+
+       if(maps.get(msg.from.id).num == msg.text){
+           bot.sendMessage(msg.chat.id, 'Вы успешно прошли, добро пожаловать')
+           maps.delete(msg.from.id)
+       }else{
+        maps.get(msg.from.id).iter = maps.get(msg.from.id).iter - 1
+        bot.deleteMessage(msg.chat.id, msg.message_id)
+        if(maps.get(msg.from.id).iter <= 0){
+          await bot.banChatMember(chat.id, query.from.id)
+        }
+        bot.sendMessage(msg.chat.id, `@${msg.from.username}\nНеверные данные, осталось попыток ` + maps.get(msg.from.id).iter + `\n${user.on_capcha()}`)
+       }
+     }
+})
+bot.on('callback_query', async query =>{
+    const  { chat, message_id, text } = query.message
+    if(maps.has(query.from.id)){
+    switch(query.data){
+        case `check_${maps.get(query.from.id).num}`:
+            bot.sendMessage(chat.id, 'Вы успешно прошли, добро пожаловать')
+            maps.delete(query.from.id)
+        break
+        default:
+            maps.get(query.from.id).iter = maps.get(query.from.id).iter - 1
+            if(maps.get(query.from.id).iter <= 0){
+               await bot.banChatMember(chat.id, query.from.id)
+            }else{
+              bot.sendMessage(chat.id, `@${query.from.username}\nНеверные данные, осталось попыток ` + maps.get(query.from.id).iter + `\n${user.on_capcha()}`)  
+            }
+            
+        break
+    
+     }
+    }
+})
+
+
+bot.on('new_chat_members', async msg=>{
     user = new User(msg.from.id)
     user.save()
     await bot.sendMessage(msg.chat.id, 
@@ -56,48 +97,3 @@ ${user.on_capcha()}
         
     })
 })
-
-
-
-
-bot.on('polling_error', async msg =>{
-    bot.sendMessage(msg.chat.id, 'ERROR')
-})
-bot.on('message', async msg =>{
-    if(!msg.text.startsWith('/')){
-        if(maps.has(msg.from.id)){
-
-       if(maps.get(msg.from.id).num == msg.text){
-           bot.sendMessage(msg.chat.id, 'Вы успешно прошли, добро пожаловать')
-           maps.delete(msg.from.id)
-       }else{
-        maps.get(msg.from.id).iter = maps.get(msg.from.id).iter - 1
-        bot.deleteMessage(msg.chat.id, msg.message_id)
-        if(maps.get(msg.from.id).iter <= 0){
-          await bot.banChatMember(chat.id, query.from.id)
-        }
-        bot.sendMessage(msg.chat.id, 'Неверные данные, осталось попыток ' + maps.get(msg.from.id).iter)
-       }
-     }
-    }
-})
-bot.on('callback_query', async query =>{
-    const  { chat, message_id, text } = query.message
-    switch(query.data){
-        case `check_${maps.get(query.from.id).num}`:
-            bot.sendMessage(chat.id, 'Вы успешно прошли, добро пожаловать')
-            maps.delete(query.from.id)
-        break
-        default:
-            maps.get(query.from.id).iter = maps.get(query.from.id).iter - 1
-            if(maps.get(query.from.id).iter <= 0){
-               await bot.banChatMember(chat.id, query.from.id)
-            }else{
-              bot.sendMessage(chat.id, 'Неверные данные, осталось попыток ' + maps.get(query.from.id).iter)  
-            }
-            
-        break
-    
-    }
-})
-
