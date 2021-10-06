@@ -1,4 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
+//Вынести в конфиг
 const token = 'token'
 const bot = new TelegramBot(token, {polling: true})
 
