@@ -28,11 +28,6 @@ class User{
     }
 }
 
-
-
-bot.on('polling_error', async msg =>{
-    bot.sendMessage(msg.chat.id, 'ERROR')
-})
 bot.on('message', async msg =>{
         if(maps.has(msg.from.id)){
 
@@ -70,7 +65,6 @@ bot.on('callback_query', async query =>{
      }
     }
 })
-
 
 bot.on('new_chat_members', async msg=>{
     user = new User(msg.from.id)
