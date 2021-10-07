@@ -38,7 +38,7 @@ bot.on('message', async msg =>{
         maps.get(msg.from.id).iter = maps.get(msg.from.id).iter - 1
         bot.deleteMessage(msg.chat.id, msg.message_id)
         if(maps.get(msg.from.id).iter <= 0){
-          await bot.banChatMember(msg.chat.id, msg.from.id)
+          await bot.banChatMember(chat.id, query.from.id)
         }
         bot.sendMessage(msg.chat.id, `@${msg.from.username}\nНеверные данные, осталось попыток ` + maps.get(msg.from.id).iter + `\n${user.get(msg.from.id).on_capcha()}`)
        }
