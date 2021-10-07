@@ -4,7 +4,7 @@ const token = 'token'
 const bot = new TelegramBot(token, {polling: true})
 
 const maps = new Map()
-let user
+const user = new Map()
 class User{
     
     constructor(chat_id){
@@ -24,7 +24,7 @@ class User{
         }
     }
     save(){
-        maps.set(this.chat_id, {num: this.summa, iter: 3})
+        maps.set(this.chat_id, {num: this.summa, iter: 3, time: Date.now()})
     }
 }
 
@@ -40,7 +40,7 @@ bot.on('message', async msg =>{
         if(maps.get(msg.from.id).iter <= 0){
           await bot.banChatMember(msg.chat.id, msg.from.id)
         }
-        bot.sendMessage(msg.chat.id, `@${msg.from.username}\nНеверные данные, осталось попыток ` + maps.get(msg.from.id).iter + `\n${user.on_capcha()}`)
+        bot.sendMessage(msg.chat.id, `@${msg.from.username}\nНеверные данные, осталось попыток ` + maps.get(msg.from.id).iter + `\n${user.get(msg.from.id).on_capcha()}`)
        }
      }
 })
@@ -57,7 +57,7 @@ bot.on('callback_query', async query =>{
             if(maps.get(query.from.id).iter <= 0){
                await bot.banChatMember(chat.id, query.from.id)
             }else{
-              bot.sendMessage(chat.id, `@${query.from.username}\nНеверные данные, осталось попыток ` + maps.get(query.from.id).iter + `\n${user.on_capcha()}`)  
+              bot.sendMessage(chat.id, `@${query.from.username}\nНеверные данные, осталось попыток ` + maps.get(query.from.id).iter + `\n${user.get(msg.from.id).on_capcha()}`)  
             }
             
         break
@@ -67,8 +67,9 @@ bot.on('callback_query', async query =>{
 })
 
 bot.on('new_chat_members', async msg=>{
-    user = new User(msg.from.id)
-    user.save()
+    user.set(msg.from.id, new User(msg.from.id))
+   user.get(msg.from.id).save()
+   console.log(user);
     await bot.sendMessage(msg.chat.id, 
 `Добро пожаловать, @${msg.from.username} !
 
@@ -76,7 +77,7 @@ bot.on('new_chat_members', async msg=>{
 https://t.me/Yggdrasil_ru/120586
 
 а также подтвердите, что вы не бот, у вас есть 3 попытки
-${user.on_capcha()}
+${ user.get(msg.from.id).on_capcha()}
 `, {parse_mode: 'HTML', reply_markup:
                                     JSON.stringify({
                                         inline_keyboard: [
