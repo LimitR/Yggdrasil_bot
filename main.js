@@ -1,6 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
-const token = 'token'
-const bot = new TelegramBot(token, {polling: true})
+const token = 'token';
+const bot = new TelegramBot(token, {polling: true});
 
 const maps = new Map();
 const user = new Map();
@@ -72,7 +72,7 @@ bot.on('callback_query', async query =>{
 bot.on('new_chat_members', async msg=>{
     user.set(msg.from.id, new User(msg.from.id));
     user.get(msg.from.id).save();
-    await bot.sendMessage(msg.chat.id, 
+    bot.sendMessage(msg.chat.id, 
 `Добро пожаловать, @${msg.from.username} !
 
 пожалуйста, ознакомьтесь с правилами 
