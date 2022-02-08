@@ -81,15 +81,15 @@ https://t.me/Yggdrasil_ru/120586
 а также подтвердите, что вы не бот, у вас есть 3 попытки
 ${ user.get(msg.from.id).on_capcha() }
 `, { parse_mode: 'HTML', reply_markup:
-                                    JSON.stringify({
-                                        inline_keyboard: [
-                                            [{ text: `${maps.get(msg.from.id).num + 5}`,  callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_1}` },
-                                            { text: `${maps.get(msg.from.id).num}`,      callback_data: `check_${maps.get(msg.from.id).num}` },
-                                            { text: `${maps.get(msg.from.id).num + 40}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_2}` },
-                                            { text: `${maps.get(msg.from.id).num + 67}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_3}` },
-                                            { text: `${maps.get(msg.from.id).num + 25}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_4}` },
-                                            ]
-                                        ]
-                                    })
+     JSON.stringify({
+         inline_keyboard: [
+             [{ text: `${maps.get(msg.from.id).num + capcha_number_not_correct_1}`,  callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_1}` },
+              { text: `${maps.get(msg.from.id).num}`,      callback_data: `check_${maps.get(msg.from.id).num}` },
+              { text: `${maps.get(msg.from.id).num + capcha_number_not_correct_2}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_2}` },
+              { text: `${maps.get(msg.from.id).num + capcha_number_not_correct_3}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_3}` },
+              { text: `${maps.get(msg.from.id).num + capcha_number_not_correct_4}`, callback_data: `check_${maps.get(msg.from.id).num + capcha_number_not_correct_4}` },
+             ]
+         ]
+     })
     });
 })
